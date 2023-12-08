@@ -36,7 +36,7 @@ def test_request_translate(app_test: FlaskClient):
     )
 
     to_languages = [
-        language.text
+        language.text.strip()
         for language in soup.find("select", {"name": "translate-to"}).find_all(
             "option"
         )
