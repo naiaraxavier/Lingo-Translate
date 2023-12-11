@@ -12,6 +12,7 @@ def prepare_base():
     db.get_collection("history").drop()
     HistoryModel(
         {
+            "_id": "6577888e26d885c273b3c56e",
             "text_to_translate": "Hello, I like videogame",
             "translate_from": "en",
             "translate_to": "pt",
@@ -20,6 +21,7 @@ def prepare_base():
 
     HistoryModel(
         {
+            "_id": "6577888e26d885c273b3c56f",
             "text_to_translate": "Do you love music?",
             "translate_from": "en",
             "translate_to": "pt",
