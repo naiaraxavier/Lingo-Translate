@@ -22,3 +22,4 @@ def test_request_history(prepare_base):
 
     expected_json = json.dumps(expected_data)
     assert history == expected_json
+    assert len(json.loads(history)) == 2
