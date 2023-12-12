@@ -67,8 +67,8 @@ def assert_unauthorized_history_deletion(app_test, valid_user):
     response = app_test.delete(
         "/admin/history/6577888e26d885c273b3c56f",
         headers={
-            "Authorization": valid_user.data["name"],
-            "User": valid_user.data["token"],
+            "Authorization": "Peter",
+            "User": "Token_123",
         },
     )
     assert response.status_code == 401
