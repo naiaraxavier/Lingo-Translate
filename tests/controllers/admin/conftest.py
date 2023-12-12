@@ -9,6 +9,7 @@ except ImportError as error:
 
 @pytest.fixture(autouse=True)
 def app_test():
+    # app.testing = True
     return app.test_client()
 
 
