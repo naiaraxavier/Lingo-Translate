@@ -10,37 +10,62 @@
   <div class="container">
     <img src="{{ url_for('static', filename='images/logo.png') }}" class="header">
     <div class="wrapper">
-      <form method="post">
+      <form method="post" id="translationForm">
         <div class="text-input">
-          <textarea name="text-to-translate" spellcheck="false" class="from-text"
-            placeholder="O que deseja traduzir">{{text_to_translate}}</textarea>
-          <textarea spellcheck="false" readonly disabled class="to-text">{{translated}}</textarea>
+          <textarea name="text-to-translate" spellcheck="false" class="from-text" placeholder="O que deseja traduzir?"
+            id="textToTranslate">{{text_to_translate}}</textarea>
+          <textarea spellcheck="false" readonly disabled class="to-text" id="translatedText">{{translated}}</textarea>
         </div>
         <ul class="controls">
           <li class="row from">
-            <select name="translate-from">
+            <select name="translate-from" id="translateFrom">
               {% for language in languages %}
               <option value="{{ language.acronym }}" {% if language.acronym==translate_from %}selected{% endif %}>
-                {{language.name|upper}}</option>
+                {{language.name|capitalize}}</option>
               {% endfor %}
             </select>
           </li>
           <div>
-            <button class="tool" type="submit" formaction="/reverse">🔁</button>
+            <button class="tool" type="submit" id="reverseButton" formaction="/reverse">🔁</button>
           </div>
           <li class="row to">
-            <select name="translate-to">
+            <select name="translate-to" id="translateTo">
               {% for language in languages %}
               <option value="{{ language.acronym }}" {% if language.acronym==translate_to %}selected{% endif %}>
-                {{language.name|upper}}</option>
+                {{language.name|capitalize}}</option>
               {% endfor %}
             </select>
           </li>
         </ul>
     </div>
-    <button class="main-button" type="submit" formaction="/">Traduzir</button>
+    <!-- <button class="main-button" type="submit" formaction="/">Traduzir</button> -->
     </form>
   </div>
+
+  <script>
+    let timer;
+    document.getElementById('textToTranslate').addEventListener('input', () => {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        translateText();
+      }, 500);
+    });
+
+    translateText = async () => {
+      try {
+        let textToTranslate = document.getElementById('textToTranslate').value;
+        let translateFrom = document.getElementById('translateFrom').value;
+        let translateTo = document.getElementById('translateTo').value;
+
+        const response = await fetch(`/translate?text=${textToTranslate}&from=${translateFrom}&to=${translateTo}`);
+        const data = await response.json();
+        document.getElementById('translatedText').value = data.translated;
+
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    }
+  </script>
 </body>
 
 </html>
