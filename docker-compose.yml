@@ -19,6 +19,7 @@ services:
       - MONGO_URI=mongodb://mongodb:27017
       - FLASK_ENV=dev
       - DB_NAME=db_traduzo
+    restart: always
   mongodb:
     image: mongo:4.4.14
     container_name: mongodb

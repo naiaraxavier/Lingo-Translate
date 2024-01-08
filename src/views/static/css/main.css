@@ -1,48 +1,104 @@
 /* Estilos gerais */
 * {
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
-  font-family: Shanti;
+  text-decoration: none;
+  outline: none;
+  border: none;
+  transition: all 0.2s linear;
+  font-size: 72.5%;
+}
+
+html {
+  font-size: 72.5%;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+*::selection {
+  background: #537180;
+  color: #fff;
 }
 
 /* Estilos do body */
 body {
+  background: #537180;
+  font-size: 24%;
+  font-family: "Poppins", sans-serif;
   justify-content: center;
-  background: #222831
 }
-
 
 .header {
-  width: 25%;
-  justify-content: left;
+  width: 20%;
+  margin: 1rem 0 2rem;
+  justify-content: center;
+  cursor: pointer;
+
+  animation: bounce 1s infinite alternate;
+  -webkit-animation: bounce 1s infinite alternate;
 }
+
+@keyframes bounce {
+  from {
+    transform: translateY(0px);
+  }
+
+  to {
+    transform: translateY(-15px);
+  }
+}
+
+@-webkit-keyframes bounce {
+  from {
+    transform: translateY(0px);
+  }
+
+  to {
+    transform: translateY(-15px);
+  }
+}
+
 
 /* Estilos do conteúdo principal */
 .container {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
   width: 80%;
-  padding: 0 30px 30px 30px;
+  padding: 10px 30px 50px 30px;
   background: #ffffff;
-  border-radius: 20px;
+  border-radius: 25px;
+  box-shadow: 0 8px 15px #000000c4;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%)
 }
 
+
 .wrapper {
-  border-radius: 10px;
-  border: 3px solid #bdd5ff;
+  width: 100%;
+  border-radius: 15px;
+  border: 2px solid #DBA967;
 }
 
 .wrapper .text-input {
   display: flex;
-  border-bottom: 3px solid #bdd5ff;
+  border-bottom: 2px solid #DBA967;
 }
 
 .text-input .to-text {
-  border-radius: 0px;
-  border-left: 3px solid #bdd5ff;
-  background-color: #bdd5ff;
+  border-left: 3px solid #EBE7C0;
+  background-color: #97c3a986;
+  border-top-right-radius: 12px;
 }
+
+.text-input .from-text {
+  border-top-left-radius: 12px;
+  color: #000000e9;
+}
+
 
 .text-input textarea {
   min-height: 45vh;
@@ -50,10 +106,10 @@ body {
   border: none;
   outline: none;
   resize: none;
-  background: #fafafa;
+  background: #ebe7c0bf;
   font-size: 24px;
   padding: 10px 10px;
-  border-radius: 5px;
+  /* border-radius: 10px; */
 }
 
 .controls,
@@ -66,34 +122,120 @@ li {
 .controls {
   list-style: none;
   padding: 5px 35px;
-  height: 25px;
+  height: 4rem;
+  justify-content: space-evenly;
 }
 
-.controls .row select {
-  border: none;
-  font-size: 24px;
+.row {
+  min-width: 350px;
+  position: relative;
+}
+
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 100%;
+  font-size: 1.15rem;
+  padding: 0.675em 6em 0.675em 1em;
+  background-color: #fff;
+  border: 1px solid #caced1;
+  border-radius: 0.25rem;
+  color: #000;
+  cursor: pointer;
+}
+
+.row::before,
+.row::after {
+  --size: 0.3rem;
+  content: "";
+  position: absolute;
+  right: 1rem;
+  pointer-events: none;
+}
+
+.row::before {
+  border-left: var(--size) solid transparent;
+  border-right: var(--size) solid transparent;
+  border-bottom: var(--size) solid black;
+  top: 40%;
+}
+
+.row::after {
+  border-left: var(--size) solid transparent;
+  border-right: var(--size) solid transparent;
+  border-top: var(--size) solid black;
+  top: 55%;
 }
 
 .tool {
-  font-size: 25px;
+  font-size: 1.7rem;
   padding: 6px;
   border: none;
-  color: #fff;
   cursor: pointer;
   border-radius: 10px;
-  background: #bdd5ff;
+  background: #fff;
   width: 115%;
 }
 
-/* .main-button {
-  margin-top: 20px;
-  font-size: 40px;
-  width: 100%;
-  padding: 14px;
-  outline: none;
+.tool:hover,
+.tool:focus {
+  scale: 1.1;
+  transition: 0.5s;
+}
+
+.playButton {
+  font-size: 2rem;
   border: none;
-  color: #fff;
+  background-color: transparent;
   cursor: pointer;
-  border-radius: 5px;
-  background: #0376E2
-} */
+  padding-right: 20px;
+}
+
+.playButton:hover,
+.playButton:focus {
+  scale: 1.1;
+  transition: 0.5s;
+}
+
+
+@media screen and (max-width: 1035px) {
+  .header {
+    width: 40%;
+  }
+
+  .container {
+    width: 90%;
+  }
+
+  .wrapper .text-input textarea {
+    min-height: 20vh;
+    font-size: 14px;
+  }
+
+  select {
+    font-size: 1rem;
+    padding: 0.5em 2em 0.5em 0.5em;
+  }
+
+  .row {
+    min-width: 110px;
+    /* position: relative; */
+  }
+
+  .playButton {
+    font-size: 1rem;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    padding-right: 5px;
+  }
+
+  .tool {
+    font-size: 1rem;
+    padding: 3px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    background: #fff;
+  }
+}

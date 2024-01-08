@@ -4,20 +4,22 @@
   <meta charset="UTF-8">
   <title>Traduzo - Trybe</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
   <div class="container">
-    <img src="{{ url_for('static', filename='images/logo.png') }}" class="header">
+    <img src="{{ url_for('static', filename='images/logo.png') }}" class="header" id="header">
     <div class="wrapper">
       <form method="post" id="translationForm">
         <div class="text-input">
-          <textarea name="text-to-translate" spellcheck="false" class="from-text" placeholder="O que deseja traduzir?"
+          <textarea name="text-to-translate" spellcheck="false" class="from-text" placeholder=""
             id="textToTranslate">{{text_to_translate}}</textarea>
           <textarea spellcheck="false" readonly disabled class="to-text" id="translatedText">{{translated}}</textarea>
         </div>
         <ul class="controls">
           <li class="row from">
+            <button class="playButton" id="playButton1" type="button">🔊</button>
             <select name="translate-from" id="translateFrom">
               {% for language in languages %}
               <option value="{{ language.acronym }}" {% if language.acronym==translate_from %}selected{% endif %}>
@@ -28,7 +30,9 @@
           <div>
             <button class="tool" type="submit" id="reverseButton" formaction="/reverse">🔁</button>
           </div>
+
           <li class="row to">
+            <button class="playButton" id="playButton2" type="button">🔊</button>
             <select name="translate-to" id="translateTo">
               {% for language in languages %}
               <option value="{{ language.acronym }}" {% if language.acronym==translate_to %}selected{% endif %}>
@@ -65,6 +69,85 @@
         console.error('Error:', error);
       }
     }
+
+    startSpeechSynthesis = () => {
+      if ('speechSynthesis' in window) {
+        const playButton1 = document.getElementById('playButton1');
+        const playButton2 = document.getElementById('playButton2');
+
+        playButton1.addEventListener('click', () => {
+          speakText('textToTranslate');
+        });
+
+        playButton2.addEventListener('click', () => {
+          speakText("translatedText");
+        });
+      } else {
+        Swal.fire({
+          color: "#AC4439",
+          showConfirmButton: false,
+          timer: 1500,
+          text: 'A funcionalidade de síntese de voz não é suportada neste navegador.',
+        });
+      }
+    }
+
+    speakText = (elementId) => {
+      const textToSpeak = document.getElementById(elementId);
+      const text = textToSpeak.value;
+      if (text !== '') {
+        const speech = new SpeechSynthesisUtterance(text);
+        window.speechSynthesis.speak(speech);
+      } else {
+        Swal.fire({
+          color: "#AC4439",
+          showConfirmButton: false,
+          timer: 1500,
+          text: 'Por favor, insira algum texto.',
+        });
+      }
+    }
+
+    document.getElementById('translateFrom').addEventListener('change', () => {
+      const selectedLanguage = document.getElementById('translateFrom').value;
+      // Obtém o texto atual no textarea
+      const textToTranslate = document.getElementById('textToTranslate').value;
+      // Atualiza o valor do textarea com o idioma selecionado
+      updateTextArea(textToTranslate, selectedLanguage);
+    });
+
+    document.getElementById('translateTo').addEventListener('change', () => {
+      const selectedLanguage = document.getElementById('translateTo').value;
+      // Obtém o texto atual no textarea
+      const textToTranslate = document.getElementById('textToTranslate').value;
+      // Atualiza o valor do textarea com o idioma selecionado
+      updateTextArea(textToTranslate, selectedLanguage);
+    });
+
+    updateTextArea = async (text, selectedLanguage) => {
+      const textToTranslate = document.getElementById('textToTranslate');
+      // Define o valor do textarea com o texto existente
+      textToTranslate.value = text;
+
+      // Realiza a tradução para o novo idioma
+      try {
+        const translateFrom = document.getElementById('translateFrom').value;
+        const translateTo = document.getElementById('translateTo').value;
+
+        const response = await fetch(`/translate?text=${text}&from=${translateFrom}&to=${translateTo}`);
+        const data = await response.json();
+        // Define o valor do textarea com o texto traduzido
+        document.getElementById('translatedText').value = data.translated;
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    }
+
+    document.getElementById("header").addEventListener("click", () => {
+      window.location.href = '/';
+    });
+
+    startSpeechSynthesis();
   </script>
 </body>
 
