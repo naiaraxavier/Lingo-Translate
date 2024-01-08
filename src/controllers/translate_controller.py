@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, jsonify
 from models.history_model import HistoryModel
 from models.language_model import LanguageModel
 from deep_translator import GoogleTranslator
@@ -15,7 +15,7 @@ def index():
         translate_to = request.form.get("translate-to")
 
     else:
-        text_to_translate = "O que deseja traduzir?"
+        text_to_translate = ""
         translate_from = "pt"
         translate_to = "en"
 
@@ -31,8 +31,21 @@ def index():
         text_to_translate=text_to_translate,
         translate_from=translate_from,
         translate_to=translate_to,
-        translated=translated,
+        # translated="",
     )
+
+
+@translate_controller.route("/translate", methods=["GET"])
+def translate():
+    text_to_translate = request.args.get("text")
+    translate_from = request.args.get("from")
+    translate_to = request.args.get("to")
+
+    translated = translated_text(
+        text_to_translate, translate_from, translate_to
+    )
+
+    return jsonify({"translated": translated})
 
 
 @translate_controller.route("/reverse", methods=["POST"])
