@@ -67,7 +67,9 @@ Abra o navegador e acesse [http://127.0.0.1:8000/](http://127.0.0.1:8000/) para 
 - `models/language_model.py`
 - `tests/admin/test_admin_controller.py`
 - `tests/models/test_history_model.py`
+- `src/views/static/images/logo.png`
 - Alguns elementos em `src/views/template/index.html`
+- Alguns elementos em `src/views/static/css/main.css`
 
 ### Desenvolvido pela Trybe
 
